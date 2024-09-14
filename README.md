@@ -1,4 +1,4 @@
-# Anthus Podcaster
+# Podcastic
 
 Anthus Podcaster is a Python-based tool that generates audio podcasts from SSML (Speech Synthesis Markup Language) files using either OpenAI or Eleven Labs text-to-speech services.
 
