@@ -1,23 +1,27 @@
 from pathlib import Path
 import typer
-from tts_services import OpenAITTS, ElevenLabsTTS, TTSService
+from utils.tts_services import get_tts_service as get_tts_service_util
 import re
 from pydub import AudioSegment
 from rich.console import Console
 from rich.progress import Progress, SpinnerColumn, TextColumn
+import logging
+
+console = Console()
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# Suppress debug logs from external libraries
+logging.getLogger("httpx").setLevel(logging.WARNING)
+logging.getLogger("httpcore").setLevel(logging.WARNING)
+logging.getLogger("openai").setLevel(logging.WARNING)
 
 app = typer.Typer()
-console = Console()
 
 def get_tts_service(service: str):
-    if service == "elevenlabs":
-        return ElevenLabsTTS()
-    elif service == "openai":
-        return OpenAITTS()
-    else:
-        raise ValueError(f"Unsupported TTS service: {service}")
+    return get_tts_service_util(service)
 
-def process_ssml(content: str, service: TTSService, output_dir: Path):
+def process_ssml(content: str, service, output_dir: Path):
     pattern = r'<speak\s+voice="(\w+)">(.*?)</speak>|<break\s+strength="([\d.]+)(m?s)"\s*/>'
     matches = re.findall(pattern, content, re.DOTALL)
     
@@ -119,4 +123,5 @@ def compile(input_file: Path, audio_files=None):
         raise typer.Exit(code=1)
 
 if __name__ == "__main__":
+    logger.debug("Starting Podcastic CLI")
     app()
