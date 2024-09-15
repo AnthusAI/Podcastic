@@ -27,7 +27,7 @@ def get_tts_service(service_name):
             raise ValueError("OpenAI API key not found in .env file")
         return OpenAITTS(api_key=api_key)
     elif service_name == 'elevenlabs':
-        api_key = os.getenv('ELEVENLABS_API_KEY')
+        api_key = os.getenv('ELEVEN_LABS_API_KEY')  # Changed from 'ELEVENLABS_API_KEY' to 'ELEVEN_LABS_API_KEY'
         if not api_key:
             raise ValueError("ElevenLabs API key not found in .env file")
         return ElevenLabsTTS(api_key=api_key)

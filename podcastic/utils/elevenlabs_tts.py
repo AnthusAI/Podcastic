@@ -4,6 +4,7 @@ Module for ElevenLabs Text-to-Speech service.
 This module provides a class to interact with ElevenLabs' TTS API.
 """
 
+import yaml
 from elevenlabs import VoiceSettings
 from elevenlabs.client import ElevenLabs
 from pathlib import Path
@@ -23,10 +24,21 @@ class ElevenLabsTTS:
         :param api_key: ElevenLabs API key
         :type api_key: str
         """
-        self.api_key = api_key
-        self.client = ElevenLabs(api_key=self.api_key)
+        self.client = ElevenLabs(api_key=api_key)
+        self.voice_mapping = self.load_voice_mapping()
 
-    def generate_audio(self, text, output_path, voice_id):
+    def load_voice_mapping(self):
+        """
+        Load voice mapping from the configuration file.
+
+        :return: Dictionary of voice mappings
+        :rtype: dict
+        """
+        with open("podcastic/config.yaml", "r") as f:
+            config = yaml.safe_load(f)
+        return {name: data['voice_id'] for name, data in config['elevenlabs'].items()}
+
+    def generate_audio(self, text, output_path, voice):
         """
         Generate audio from text using ElevenLabs' TTS API.
 
@@ -34,12 +46,25 @@ class ElevenLabsTTS:
         :type text: str
         :param output_path: Path to save the generated audio
         :type output_path: str or Path
-        :param voice_id: ID of the voice to use for TTS
-        :type voice_id: str
+        :param voice: Name of the voice to use for TTS
+        :type voice: str
         """
-        audio = self.client.text_to_speech.convert(
+        voice_id = self.voice_mapping.get(voice.lower())
+        if not voice_id:
+            raise ValueError(f"Voice '{voice}' not found in configuration")
+
+        console.print(f"Generating audio for {voice} (voice_id: {voice_id})")
+
+        audio_stream = self.client.text_to_speech.convert(
             voice_id=voice_id,
             text=text,
+            voice_settings=VoiceSettings(stability=0.5, similarity_boost=0.5)
         )
+        
+        output_path = Path(output_path)
         with open(output_path, 'wb') as file_out:
-            file_out.write(audio)
+            for chunk in audio_stream:
+                if chunk:
+                    file_out.write(chunk)
+        
+        console.print(f"Generated: {output_path.name}")
