@@ -211,6 +211,17 @@ def generate_utterance(
 
     logger.debug(f"Name usage instruction: {name_usage_instruction}")
 
+    if speaker.lower() == 'ava' and utterance_count['ava'] > 1 and not is_final_utterance:
+        extended_response_instruction = (
+            "As Ava, you may provide a more detailed response if you have additional relevant information. "
+            "Your response can be up to twice as long as usual, but only if it adds significant value to the discussion. "
+            "If you don't have much to add, keep your response brief as before."
+        )
+    else:
+        extended_response_instruction = (
+            "Keep your response brief, ideally one or two sentences at most."
+        )
+
     prompt = ChatPromptTemplate.from_messages([
         SystemMessagePromptTemplate.from_template(system_prompt),
         HumanMessagePromptTemplate.from_template(
@@ -223,7 +234,7 @@ def generate_utterance(
             "Ensure your response maintains continuity with the recent conversation and relates to the overall podcast topic.\n"
             "Do not include your name at the beginning of your response.\n"
             "Provide your response as plain text without any markdown or formatting.\n"
-            "IMPORTANT: Keep your response brief, ideally one or two sentences at most.\n"
+            "{extended_response_instruction}\n"
             "Advance the conversation with new information or a unique perspective related to the current section.\n"
             "If you're Marvin, ask a question that hasn't been asked before or provide a unique insight.\n"
             "If you're Ava, provide a concise explanation or introduce a new aspect of the topic that hasn't been discussed.\n"
@@ -238,6 +249,7 @@ def generate_utterance(
         section=section,
         editorial_guidelines=editorial_guidelines,
         name_usage_instruction=name_usage_instruction,
+        extended_response_instruction=extended_response_instruction,
         speaker=speaker.capitalize(),
         other_speaker=other_speaker.capitalize(),
     ).to_messages()
