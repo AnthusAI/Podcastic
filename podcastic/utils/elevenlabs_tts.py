@@ -34,7 +34,7 @@ class ElevenLabsTTS:
         :return: Dictionary of voice mappings
         :rtype: dict
         """
-        with open("podcastic/config.yaml", "r") as f:
+        with open("config.yaml", "r") as f:
             config = yaml.safe_load(f)
         return {name: data['voice_id'] for name, data in config['elevenlabs'].items()}
 

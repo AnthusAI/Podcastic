@@ -22,6 +22,11 @@ setup(
         "requests",
         "python-dotenv",
         "rich",
+        "langchain",
+        "langchain-community",
+        "elevenlabs",
+        "langchain-openai",
+        'logging',
     ],
     entry_points={
         "console_scripts": [

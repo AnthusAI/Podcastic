@@ -1,0 +1,62 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Podcastic - Write",
+            "type": "python",
+            "request": "launch",
+            "module": "podcastic.podcastic",
+            "args": [
+                "write",
+                "--topic", "~/projects/Anth.us/src/blog/posts/rethinking-ai-hallucination.mdx"
+            ],
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}"
+            },
+            "python": "/Users/ryan/miniconda3/envs/podcastic/bin/python",
+            "justMyCode": true,
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "Podcastic - Generate",
+            "type": "python",
+            "request": "launch",
+            "module": "podcastic.podcastic",
+            "args": [
+                "generate",
+                "--input", "output.ssml"
+            ],
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}"
+            },
+            "python": "/Users/ryan/miniconda3/envs/podcastic/bin/python",
+            "justMyCode": true,
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "Podcastic - Compile",
+            "type": "python",
+            "request": "launch",
+            "module": "podcastic.podcastic",
+            "args": [
+                "compile",
+                "--input", "output.ssml"
+            ],
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}"
+            },
+            "python": "/Users/ryan/miniconda3/envs/podcastic/bin/python",
+            "justMyCode": true,
+            "cwd": "${workspaceFolder}"
+        },
+    ]
+}
