@@ -1,5 +1,10 @@
 """
 Module for compiling generated audio files into a single podcast.
+
+This module implements the 'compile' command, which takes individual audio files
+generated from the SSML script and combines them into a single, cohesive podcast
+audio file. It handles the sequencing of audio segments and ensures proper
+timing between utterances.
 """
 
 from pathlib import Path

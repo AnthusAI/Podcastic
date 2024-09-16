@@ -1,9 +1,11 @@
 """
 Module for generating podcast scripts using available knowledge bases.
 
-This module implements a command to generate podcast scripts in a custom markup language
-based loosely on SSML, using logic to create an outline and orchestrate two different
-tools for writing the script.
+This module implements the 'write' command, which is responsible for creating
+a podcast script based on a given topic. It uses AI models to generate an outline
+and then expands it into a full script with alternating speakers (Ava and Marvin).
+The script generation process involves complex logic to ensure coherent dialogue,
+maintain conversation flow, and adhere to editorial guidelines.
 """
 
 import typer
@@ -34,6 +36,24 @@ def run(
     topic: Path = typer.Option(..., help="Path to the topic markdown file"),
     output: Path = typer.Option("output.ssml", help="Path to save the podcast script")
 ):
+    """
+    Main function for the 'write' command.
+
+    This function orchestrates the entire script writing process. It loads the topic,
+    generates an outline, splits it into sections, and then creates utterances for
+    each speaker. The resulting script is saved in a custom SSML-like format.
+
+    The process involves several steps:
+    1. Loading and parsing the topic file
+    2. Generating an outline using AI
+    3. Splitting the outline into manageable sections
+    4. Generating utterances for each speaker, alternating between Ava and Marvin
+    5. Adding appropriate pauses between utterances
+    6. Saving the final script in SSML format
+
+    This function is the core of the script generation process and ties together
+    various helper functions to create a coherent podcast script.
+    """
     logger.debug(f"Starting script generation for topic: {topic}")
     topic_content = topic.read_text()
     logger.debug("Topic content loaded")
@@ -132,6 +152,16 @@ def generate_outline(
     editorial_guidelines: str,
     editorial_outline_model: str
 ) -> str:
+    """
+    Generate a podcast outline based on the given topic and guidelines.
+
+    This function uses an AI model to create a structured outline for the podcast.
+    It takes into account the topic content and editorial guidelines to ensure
+    the outline is relevant and adheres to the podcast's style and requirements.
+
+    The outline serves as the backbone for the entire script, guiding the
+    conversation flow and ensuring all important points are covered.
+    """
     logger.debug("Starting outline generation")
     from langchain_openai import ChatOpenAI
     from langchain.prompts import PromptTemplate
@@ -180,6 +210,22 @@ def generate_utterance(
     topic_content: str,
     retry_count: int = 0
 ) -> str:
+    """
+    Generate a single utterance for a given speaker.
+
+    This complex function is responsible for creating individual speech segments
+    for either Ava or Marvin. It takes into account the current context, conversation
+    history, and various parameters to generate a relevant and natural-sounding response.
+
+    The function includes logic to:
+    - Maintain conversation flow and coherence
+    - Adhere to the speaker's personality and role
+    - Avoid repetition and ensure topic relevance
+    - Handle special cases like initial utterances and the podcast conclusion
+
+    It's a critical part of the script generation process, essentially simulating
+    a dynamic conversation between two AI entities.
+    """
     logger.debug(f"Generating utterance for {speaker}")
     from langchain_openai import ChatOpenAI
     from langchain.prompts import ChatPromptTemplate, SystemMessagePromptTemplate, HumanMessagePromptTemplate

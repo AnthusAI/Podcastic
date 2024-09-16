@@ -1,5 +1,10 @@
 """
 Module for generating audio files from SSML input using specified TTS service.
+
+This module implements the 'generate' command, which converts a podcast script
+in SSML format into individual audio files. It supports multiple TTS services
+(currently OpenAI and Eleven Labs) and handles the process of breaking down
+the SSML, sending requests to the TTS service, and saving the resulting audio files.
 """
 
 from pathlib import Path
@@ -23,7 +28,23 @@ def run(
     input: Path = typer.Option(..., "--input", help="Path to the input SSML file"),
     service: str = typer.Option("openai", help="TTS service to use (elevenlabs or openai)")
 ):
-    """Generate audio files from an SSML file using the specified TTS service."""
+    """
+    Main function for the 'generate' command.
+
+    This function orchestrates the audio generation process. It reads the SSML file,
+    processes it to extract individual speech segments, sends these segments to
+    the specified TTS service, and saves the resulting audio files.
+
+    The process involves:
+    1. Reading and parsing the SSML file
+    2. Selecting the appropriate TTS service
+    3. Processing each speech segment and generating audio
+    4. Saving individual audio files
+    5. Initiating the compilation process to create the full podcast
+
+    This function bridges the gap between the written script and audio production,
+    turning the AI-generated dialogue into spoken word.
+    """
     logger.info(f"Starting generation process with input file: {input} and service: {service}")
     
     input_file = Path(input).resolve()
