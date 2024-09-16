@@ -26,7 +26,8 @@ setup(
         "langchain-community",
         "elevenlabs",
         "langchain-openai",
-        'logging',
+        "pytest",
+        "pytest-watch"
     ],
     entry_points={
         "console_scripts": [
