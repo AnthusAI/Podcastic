@@ -29,7 +29,8 @@
             "module": "podcastic.podcastic",
             "args": [
                 "generate",
-                "--input", "output.ssml"
+                "--input", "output.ssml",
+                "--service", "elevenlabs"
             ],
             "console": "integratedTerminal",
             "cwd": "${workspaceFolder}",
