@@ -71,3 +71,7 @@ This format allows for precise control over speaker changes and timing in the ge
 
 ### Output
 Generated files are saved in the `generated/<input_file_name>/` directory.
+
+---
+
+An experiment from [Anthus AI Solutions](https://anth.us).
